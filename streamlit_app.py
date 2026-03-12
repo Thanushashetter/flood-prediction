@@ -599,6 +599,14 @@ def phase6_weights(sim: pd.DataFrame, city_df: pd.DataFrame) -> tuple:
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def phase7_pngs(city_df, sim, profiles, conv):
+    # Ensure priority_tier exists (added in Phase 5; may be absent if called directly)
+    if "priority_tier" not in profiles.columns:
+        profiles = profiles.copy()
+        profiles["priority_tier"] = pd.cut(
+            profiles["maintenance_priority_score"],
+            bins=[0, 0.25, 0.50, 0.75, 1.01],
+            labels=["LOW", "MEDIUM", "HIGH", "CRITICAL"]
+        ).astype(str)
     gn = GRID_N
     def _g(df, col): return df.sort_values(["grid_row","grid_col"])[col].values.reshape(gn,gn)
 
@@ -1484,10 +1492,10 @@ def main():
     if not data_exists():
         st.markdown("## 🌊 FloodSense — First Launch Setup")
         st.markdown(f"""
-**Patent Implementation:** Adaptive Micro-Zone Urban Flood Prediction System
+
 
 Grid: **25 × 25 = {N_ZONES} micro-zones** (200m each) · Simulation: **5 years (1,825 days)**
-Memory: **~350 MB peak** · CSV output: **~150 MB**
+
 
 | Phase | Description | Est. Time |
 |-------|-------------|-----------|
