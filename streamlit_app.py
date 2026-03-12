@@ -1099,10 +1099,11 @@ def page_forecast():
                tick_labels=["No Flood","FLOOD"]); st.pyplot(fig); plt.close(fig)
 
     st.subheader(f"⚠️ High-Risk Zones — Day +{chosen} ({sc_sel})")
-    want=sc(city_df,["zone_id","land_use","drain_age_yrs","drain_material","elevation_m"])
+   want = ["zone_id", "land_use", "drain_age_yrs", "drain_material"]
+
     hr  =day_data.merge(city_df[want],on="zone_id",how="left")
     hr  =hr[hr["flood_prob"]>0.40].sort_values("flood_prob",ascending=False).head(30)
-    show=sc(hr,["zone_id","land_use","rainfall_mm","load_ratio","flood_prob","flood_pred","elevation_m"])
+    show = hr[["zone_id", "land_use", "rainfall_mm", "load_ratio", "flood_prob"]]
     if hr.empty: st.success("✅ No high-risk zones for this day/scenario.")
     else: st.dataframe(hr[show].rename(columns={"zone_id":"Zone","land_use":"Land Use",
                   "rainfall_mm":"Rainfall (mm)","load_ratio":"Load Ratio",
@@ -1433,9 +1434,10 @@ def page_maint():
         st.subheader("Zone Maintenance Table")
         tiers=st.multiselect("Filter by Priority",["CRITICAL","HIGH","MEDIUM","LOW"],
                              default=["CRITICAL","HIGH"])
-        want=sc(df,["zone_id","land_use","drain_age_yrs","drain_material",
-                    "final_degradation","flood_rate","flood_classification",
-                    "maintenance_priority_score","priority_tier","maintenance_rank"])
+        want = ["zone_id", "land_use", "drain_age_yrs", "drain_material",
+        "final_degradation", "flood_rate", "flood_classification",
+        "maintenance_priority_score", "priority_tier", "maintenance_rank"]
+        df[want]
         disp=(df[df["priority_tier"].astype(str).isin(tiers)]
               .sort_values("maintenance_priority_score",ascending=False)[want].head(60).copy())
         if "final_degradation" in disp.columns:
