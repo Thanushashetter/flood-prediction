@@ -1085,8 +1085,8 @@ def page_forecast():
     st.markdown("---")
     chosen=st.slider("Forecast Day — Spatial Map",1,7,3)
     city_df=load_city(); day_data=fcast[fcast["day_ahead"]==chosen].copy()
-    merged =city_df.merge(day_data[sc(day_data,["zone_id","flood_prob","flood_pred","rainfall_mm"])],
-                          on="zone_id",how="left")
+    merged = city_df.merge(day_data[["zone_id", "flood_prob", "flood_pred", "rainfall_mm"]],
+                       on="zone_id", how="left")
     cm1,cm2=st.columns(2)
     with cm1:
         fig=hm(merged.sort_values(["grid_row","grid_col"])["flood_prob"].fillna(0).values.reshape(GRID_N,GRID_N),
