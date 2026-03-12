@@ -1,9 +1,11 @@
 [server]
 fileWatcherType = "none"
-maxUploadSize = 50
-
-[browser]
-gatherUsageStats = false
+headless = true
+enableCORS = false
 
 [theme]
 base = "dark"
+backgroundColor = "#0d1117"
+secondaryBackgroundColor = "#161b22"
+textColor = "#e6edf3"
+primaryColor = "#58a6ff"
