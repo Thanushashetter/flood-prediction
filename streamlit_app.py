@@ -1099,7 +1099,7 @@ def page_forecast():
                tick_labels=["No Flood","FLOOD"]); st.pyplot(fig); plt.close(fig)
 
     st.subheader(f"⚠️ High-Risk Zones — Day +{chosen} ({sc_sel})")
-   want = ["zone_id", "land_use", "drain_age_yrs", "drain_material"]
+    want = ["zone_id", "land_use", "drain_age_yrs", "drain_material"]
 
     hr  =day_data.merge(city_df[want],on="zone_id",how="left")
     hr  =hr[hr["flood_prob"]>0.40].sort_values("flood_prob",ascending=False).head(30)
