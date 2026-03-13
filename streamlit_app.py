@@ -1103,12 +1103,23 @@ def page_forecast():
 
     hr  =day_data.merge(city_df[want],on="zone_id",how="left")
     hr  =hr[hr["flood_prob"]>0.40].sort_values("flood_prob",ascending=False).head(30)
-    show = hr[["zone_id", "land_use", "rainfall_mm", "load_ratio", "flood_prob"]]
-    if hr.empty: st.success("✅ No high-risk zones for this day/scenario.")
-    else: st.dataframe(hr[show].rename(columns={"zone_id":"Zone","land_use":"Land Use",
-                  "rainfall_mm":"Rainfall (mm)","load_ratio":"Load Ratio",
-                  "flood_prob":"Flood Prob","flood_pred":"Predicted","elevation_m":"Elevation (m)"}),
-                  use_container_width=True,hide_index=True)
+    cols = ["zone_id", "land_use", "rainfall_mm", "load_ratio", "flood_prob"]
+      show = hr[[c for c in cols if c in hr.columns]]
+
+    if show.empty:
+        st.success("✅ No high-risk zones for this day/scenario.")
+    else:
+       st.dataframe(
+        show.rename(columns={
+            "zone_id": "Zone",
+            "land_use": "Land Use",
+            "rainfall_mm": "Rainfall (mm)",
+            "load_ratio": "Load Ratio",
+            "flood_prob": "Flood Prob"
+        }),
+        use_container_width=True,
+        hide_index=True
+    )
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
