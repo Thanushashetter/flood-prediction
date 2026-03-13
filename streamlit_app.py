@@ -1104,7 +1104,7 @@ def page_forecast():
     hr  =day_data.merge(city_df[want],on="zone_id",how="left")
     hr  =hr[hr["flood_prob"]>0.40].sort_values("flood_prob",ascending=False).head(30)
     cols = ["zone_id", "land_use", "rainfall_mm", "load_ratio", "flood_prob"]
-      show = hr[[c for c in cols if c in hr.columns]]
+    show = hr[[c for c in cols if c in hr.columns]]
 
     if show.empty:
         st.success("✅ No high-risk zones for this day/scenario.")
